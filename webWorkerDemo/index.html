@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>web Worker测试</title>
+</head>
+<body>
+    <script>
+        var worker = new Worker('./sonWorker.js');
+        worker.postMessage('Hello World');
+        worker.postMessage({cmd: 'start',msg:'开始了'});
+        worker.onmessage = function (event) {
+            doSomething(event.data);
+        }
+        worker.onerror = function (event) {
+            console.log(
+                'ERROR: Line ', event.lineno, ' in ', event.filename, ': ', event.message
+            );
+        };
+        function doSomething(data) {
+            console.log("父线程收到数据：",data)
+            worker.postMessage({cmd: 'stop',msg:'结束吧'});
+            // worker.terminate();
+        }
+    </script>
+</body>
+</html>

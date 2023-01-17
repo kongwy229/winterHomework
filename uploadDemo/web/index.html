@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件上传DEMO</title>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <img class="img" src="">    <!-- 用于预览图片-->
+    <input class="input-img" type="file" accept="image/*" style="display: none;"><!-- 读取图片 -->
+    <button class="upload-btn">选择图片上传</button><!-- 触发事件 -->
+    <script>
+    $('.upload-btn').click(function () {
+        $('.input-img').click();
+    })
+    $('.input-img').on('change', function () {
+        let file = $('.input-img').get(0).files[0];
+        if (!file || file.length == 0) {
+            return;
+        }
+        let fileName = file.name;
+        let fileType = fileName.substr(fileName.lastIndexOf(".")).toUpperCase();
+        if (fileType != ".GIF" && fileType != ".PNG" && fileType != ".JPG" && fileType != ".JPEG") {
+            alert('请选择图片文件！');
+            return;
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            alert('上传图片大小不能超过 2MB')
+            $('.input-img').get(0).value = '';
+            return
+        }
+        $('.img').attr('src', fileToBase64(file)) // 将图片转化为 base64 进行预览
+        const formdata = new FormData();
+        formdata.append("file", file,file.name);
+        $.ajax({
+            url: 'http://localhost:3000/upload',
+            method: 'post',
+            data: formdata,
+            processData:false, // 不需要数据序列化，因为传输的数据是 FormData 对象
+            contentType:false, // 不需要带有 headers 的 content-type 字段，因为传递 FormData 对象就已经默认了 mutipart/form-data
+            xhr: function () {
+                let xhr = new XMLHttpRequest()
+                // 精度事件
+                xhr.upload.addEventListener('progress', function(e) {
+                    if (e.lengthComputable) {
+                        let progress = Math.round(e.loaded * 100 / e.total) + '%'
+                        console.log('上传进度：', progress)
+                    } else {
+                        console.log('无法计算上传进度')
+                    }
+                })
+                xhr.upload.addEventListener('load', function(e) {
+                    console.log('上传成功')
+                })
+                xhr.upload.addEventListener('error', function(e) {
+                    console.log('上传失败')
+                })
+                xhr.upload.addEventListener('abort', function(e) {
+                    console.log('用户取消上传/浏览器断开了连接')
+                })
+                return xhr;
+            }
+        }).done(function (data) {
+            console.log('后端返回的信息：' , data)
+        }).fail(function (err) {
+            console.log(err)
+            alert('服务器异常')
+        })
+    })
+  
+    /**
+     * 文件流转为 base64
+     * @param {*} file 
+     */
+    function fileToBase64(file) {
+        var URL = window.URL || window.webkitURL;
+        return URL.createObjectURL(file);
+    }  
+    </script>
+</body>
+</html>

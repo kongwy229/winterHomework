@@ -1,0 +1,2 @@
+《Nodejs实战》第二章代码demo
+利用node实现事件驱动的聊天室程序，服务端实时采用Socket.IO，客户端实时采用webSocket方案并且采用jQuery进行DOM操作。

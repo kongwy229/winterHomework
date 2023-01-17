@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flex练习</title>
+    <style>
+        *{
+            margin: 0;
+            padding:0;
+        }
+        .container{
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .container ul{
+            width: 100px;
+            height: 150px;
+            margin: 10px;
+            background-color: aliceblue;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+        }
+        .container ul li{
+            list-style-type: none;
+            width:30px;
+            height:30px;
+            border-radius: 50%;
+            background-color: #4ea1d9;
+        }
+        .container__one{
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container__two{
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .container__three{
+            flex-direction: column; /*水平轴设置为竖向*/
+            justify-content: space-evenly;
+        }
+        .container__three li:nth-child(1){
+            align-self: flex-start;
+            margin-left: 10px;
+        }
+        .container__three li:nth-child(2){
+            align-self: center;
+        }
+        .container__three li:nth-child(3){
+            align-self: flex-end;
+            margin-right:10px;
+        }
+        .container__four{ /*4和6的样式相同*/
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        .container__four li{
+            margin: 10px; /*调整边距，没两个占一行*/
+        }
+        .container__eight li{ /*8的大体样式延用4，边距小一点*/
+            margin: 2px;
+        }
+        .container__nine li{
+            margin: 0; /*9也是调整间距*/
+        }
+
+
+        .container__five{
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+        .container__five li:nth-child(3){
+            margin: 0 30px; /*只调整第三个，让其独占一行*/
+        }
+
+        .container__seven{
+            width: 100px;
+            height: 150px;
+            margin: 10px;
+            background-color: aliceblue;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .container__seven ul{
+            border:0px;
+            width: 100%;
+            margin: 0px;
+        }
+        .container__seven .container__three{
+            height: 50%;
+            flex-direction: row;
+        }
+        .container__seven .container__three li:nth-child(1){
+            align-items: flex-start;
+            margin: 5px 0px 0px 5px; /*上 右 下 左*/
+        }
+        .container__seven .container__three li:nth-child(2){
+            align-items: center;
+        }
+        .container__seven .container__three li:nth-child(3){
+            align-items: flex-end;
+            margin: 0px 5px 5px 0px; /*由于container__three开启了bfc 所以不会影响外面的布局，margin-bottom让自身向上移动*/
+        }
+        .container__seven .container__four{
+            height: 50%;
+        }
+        .container__seven .container__four li{
+            margin: 1px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <ul class="container__one">
+            <li></li>
+        </ul>
+        <ul class="container__two">
+            <li></li>
+            <li></li>
+        </ul>
+        <ul class="container__three">
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <ul class="container__four">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <ul class="container__five">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <ul class="container__four">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <div class="container__seven">
+            <ul class="container__three"> 
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul class="container__four">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+        <ul class="container__four container__eight">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <ul class="container__four container__nine">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+</body>
+</html>
