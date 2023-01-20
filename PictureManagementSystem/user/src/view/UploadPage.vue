@@ -1,113 +1,58 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://forum.vuejs.org"
-          target="_blank"
-        >
-          Forum
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://chat.vuejs.org"
-          target="_blank"
-        >
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://twitter.com/vuejs"
-          target="_blank"
-        >
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a
-          href="http://vuejs-templates.github.io/webpack/"
-          target="_blank"
-        >
-          Docs for This Template
-        </a>
-      </li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a
-          href="http://router.vuejs.org/"
-          target="_blank"
-        >
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vuex.vuejs.org/"
-          target="_blank"
-        >
-          vuex
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vue-loader.vuejs.org/"
-          target="_blank"
-        >
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-        >
-          awesome-vue
-        </a>
-      </li>
-    </ul>
-  </div>
+   <div class="uploadPage">
+      <Panel>
+         <template v-slot:header>
+          发布图片
+        </template>
+        <div class="w-full px-4 flex space-x-4 items-center">
+            <label class="w-20 flex-none text-lg ">标题：</label>
+            <Input  class="flex-grow" placeholder="请输入标题" :limit="30" v-model="title"/>
+        </div>
+        <div class="w-full px-4 flex space-x-4 items-center">
+            <label class="w-20 flex-none text-lg ">图片介绍：</label>
+            <Input  class="flex-grow" placeholder="请输入图片介绍" :limit="300" v-model="desc"/>
+        </div>
+        <div class="w-full px-4 flex space-x-4 items-center">
+            <label class="w-20 flex-none text-lg ">上传图片:</label>
+            <Upload/>
+        </div>
+        <template v-slot:footer>
+          <Button size="xl" @click="submit" >发 布</Button>
+        </template>
+      </Panel>
+   </div>
 </template>
 
 <script>
+import Panel from '@/components/Panel.vue'
+import Button from '@/components/Button.vue'
+import Input from '../components/Input.vue'
+import Upload from '../components/Upload'
 export default {
-  name: 'HelloWorld',
+  name: 'UploadPage',
+  components: {
+    Panel,
+    Button,
+    Input,
+    Upload
+  },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      title: '',
+      desc: ''
+    }
+  },
+  methods: {
+    submit (e) {
+      console.log(this.msg)
     }
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
+ .uploadPage{
+    width: 80%;
+    margin: 0px auto;
+ }
 </style>

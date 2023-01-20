@@ -6,11 +6,12 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
+    "start": "cross-env TAILWIND_MODE=watch npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js"
   },
   "dependencies": {
+    "cross-env": "^7.0.3",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

@@ -2,15 +2,22 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import router from './router'
-import 'tailwindcss/tailwind.css'
+import Router from 'vue-router'
+import routes from './router'
+import './styles/index.css'
+// 引入自定义指令
+import setting from './directive/index'
+Vue.use(setting)
 
+Vue.use(Router)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
+  router: new Router({
+    routes
+  }),
   components: { App },
   template: '<App/>'
 })
