@@ -1,7 +1,7 @@
 <template>
-  <div class=" w-full h-full bg-gray-400 pb-8">
+  <div class=" w-full h-full bg-gray-400 min-h-screen">
     <Header/>
-    <div class="container">
+    <div class="mhy-container">
       <router-view />
     </div>
   </div>
@@ -16,10 +16,9 @@ export default {
 </script>
 
 <style scoped>
-.container{
+.mhy-container{
   width:100%;
-  padding-top:40px;
-  margin-top:62px;
+  padding-top:100px;
   background: url("/static/mhy-bg.png") no-repeat 0 62px;
   background-size:100%;
 }

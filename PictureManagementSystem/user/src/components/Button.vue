@@ -1,8 +1,13 @@
 <template>
     <button
-    :class="size"
-    class="inline-block bg-primary-500 text-white rounded-full hover:bg-primary-600"
-    @click="clickCb"
+    :class="{
+      'xl':size === 'xl',
+      'md': size === 'md',
+      'bg-primary-500 text-white hover:bg-primary-600':!plain,
+      'bg-white border-gray-600 border text-gray-600':plain,
+      }"
+    class="inline-block rounded-full"
+    @click="handleClick"
     >
         <slot></slot>
     </button>
@@ -11,11 +16,12 @@
 
 export default {
   props: {
-    size: String
+    size: String,
+    plain: Boolean
   },
   name: 'Button',
   methods: {
-    clickCb (event) {
+    handleClick (event) {
       event.stopPropagation()
       this.$emit('click', event)
     }
@@ -26,5 +32,9 @@ export default {
   .xl{
     width:241px;
     height:50px;
+  }
+  .md{
+    width:100px;
+    height:30px;
   }
 </style>

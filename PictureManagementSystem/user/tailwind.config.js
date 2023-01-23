@@ -9,7 +9,7 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     boxShadow: {
-      DEFAULT: '0px 4px 10px rgba(191, 202, 213, 0.25)'
+      DEFAULT: '0px 4px 10px rgba(81, 81, 82, 0.9)'
     },
     fontSize: {
       base: '12px',
@@ -19,6 +19,10 @@ module.exports = {
       '3xl': '22px'
     },
     extend: {
+      height: {
+        md: '62px',
+        lg: '110px'
+      },
       colors: {
         primary: {
           500: '#4FB5F9',

@@ -34,9 +34,13 @@ export default function upload (option) {
   }
 
   const xhr = new XMLHttpRequest()
-  const action = 'http://localhost:3007/upload' // 请求地址
+  const action = 'http://localhost:3000/upload' // 请求地址
   const formData = new FormData()
-
+  if (option.data) { // 把上传时附带的参数复制到formData中
+    Object.keys(option.data).forEach(key => {
+      formData.append(key, option.data[key])
+    })
+  }
   // 把文件放到请求体内
   // FormData.set 和 append() 的区别在于，如果指定的键已经存在，
   // FormData.set 会使用新值覆盖已有的值，而 append() 会把新值添加到已有值集合的后面。

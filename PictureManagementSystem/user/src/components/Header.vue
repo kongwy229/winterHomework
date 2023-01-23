@@ -1,7 +1,7 @@
 <template>
-  <div class=" header fixed w-full h-[62px] bg-gray-1000 flex flex-start items-center text-lg text-white space-x-4">
+  <div class=" z-10 header fixed w-full h-md bg-gray-1000 flex flex-start items-center text-lg text-white space-x-4">
       <div>
-        <img class="h-[62px]" src="@/assets/mys-logo.png"/>
+        <img class="h-md" src="@/assets/mys-logo.png"/>
       </div>
       <router-link  v-for="router in routes" :key="router.path" :to="router.path">
             {{router.navName}}
