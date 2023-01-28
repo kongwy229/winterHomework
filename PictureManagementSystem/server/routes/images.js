@@ -18,7 +18,8 @@ const storage = multer.diskStorage({
   }
   const upload = multer({storage,limits})
   
-router.post('/upload',upload.single('file'),imageController.uploadImages);
+router.post('/images',upload.single('file'),imageController.addImages);
+router.get('/images',imageController.getImages);
 // router.get('/getArticle', async(ctx, next) => {
 //     ctx.body = {
 //         code: 200,

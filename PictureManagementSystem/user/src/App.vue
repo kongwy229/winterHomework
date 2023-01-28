@@ -1,5 +1,5 @@
 <template>
-  <div class=" w-full h-full bg-gray-400 min-h-screen">
+  <div class=" w-full h-full bg-gray-400 min-h-screen overflow-hidden">
     <Header/>
     <div class="mhy-container">
       <router-view />

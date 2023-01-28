@@ -10,19 +10,17 @@ const logger = require('koa-logger')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
-const upload = require('./routes/upload')
+const upload = require('./routes/images')
 
 require("./database");
-// error handler
 onerror(app)
 
-// middlewares
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
 }))
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/public',{maxAge:10 * 24 * 60 * 60}))
+app.use(require('koa-static')(__dirname + '/public',{maxage: 300}))
 
 app.use(views(__dirname + '/views', {
   extension: 'ejs'

@@ -3,7 +3,7 @@
         <Panel :class="'shadow dialog-'+size">
             <template v-slot:header>
             <div class="flex w-full h-full justify-between items-center">
-                <span>设置</span>
+                <span>{{title ? title : '设置'}}</span>
                 <button @click="handleClose">
                   <icon :w="20" :h="20"  name="close" class="text-gray-800 cursor-pointer"/>
                 </button>
@@ -13,8 +13,8 @@
               <slot></slot>
             </div>
             <template v-slot:footer>
-                <Button size="md" plain @click="handleCancel">{{cancelText ? cancelText : '取消'}}</Button>
-                <Button size="md" @click="handleConfirm">{{confirmText ? confirmText : '确定'}}</Button>
+                <Button v-show="!hiddenButton" size="md" plain @click="handleCancel">{{cancelText ? cancelText : '取消'}}</Button>
+                <Button v-show="!hiddenButton" size="md" @click="handleConfirm">{{confirmText ? confirmText : '确定'}}</Button>
             </template>
         </Panel>
     </div>
@@ -27,8 +27,10 @@ export default {
   props: {
     size: String,
     isOpen: Boolean,
+    hiddenButton: Boolean,
     confirmText: String,
-    cancelText: String
+    cancelText: String,
+    title: String
   },
   name: 'Dialog',
   components: {
@@ -60,6 +62,16 @@ export default {
   }
   .dialog-md{
     width:480px;
-    height: 530px;
+    height: 520px;
+  }
+  .dialog-lg{
+    width:700px;
+    height:450px;
+  }
+  @media (max-width: 480px) {
+      .dialog-lg{
+        width:100%;
+        height:520px;
+      }
   }
 </style>

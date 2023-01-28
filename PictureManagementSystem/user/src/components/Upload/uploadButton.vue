@@ -1,6 +1,6 @@
 <template>
   <div
-  class=" w-[250px] h-[190px] bg-gray-300 rounded-lg flex flex-col justify-center items-center space-y-2 cursor-pointer"
+  class=" md:w-[250px] md:h-[190px] bg-gray-300 rounded-lg flex flex-col justify-center items-center space-y-2 cursor-pointer"
   @click="handleClick">
     <icon name="upload" :w="40" :h="40" class="text-primary-500"/>
     <p class="text-gray-700 text-xl">点击添加照片</p>
@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import ajax from './ajax'
+import {upload} from '@/apis/index'
 export default {
   props: {
     list: Array,
@@ -36,17 +36,16 @@ export default {
 
     uploadFiles (files) {
       const len = this.limit - this.list.length
+      // 限制格式
+      let postFiles = Array.from(files).filter((item) => {
+        return /\.(jpg|jpeg|png|JPG|PNG)$/.test(item.name)
+      })
       // 判断文件选择的个数 todo 做一个全局弹窗 提示只上传前50个
-      if (this.limit && len < files.length) {
+      if (len < postFiles.length) {
         alert('超出限制')
       }
-      // todo:限制文件类型
-      // if (!/\.(jpg|jpeg|png|JPG|PNG)$/.test(e.target.value)) {
-      //   this.$message.error('请上传.png/.jpg/.jpeg格式的图片')
-      //   return false
-      // }
       // 转化为待传文件数组
-      let postFiles = Array.prototype.slice.call(files, 0, len)
+      postFiles = postFiles.slice(0, len)
       if (postFiles.length === 0) { return }
       postFiles.forEach(rawFile => {
         this.$emit('start', rawFile)
@@ -75,7 +74,12 @@ export default {
               reject(err)
             }
           }
-          const req = ajax(options) // 发送上传到服务器的请求
+          const formData = new FormData()
+          Object.keys(options.data).forEach(key => {
+            formData.append(key, options.data[key])
+          })
+          formData.append('file', options.file, options.file.name)
+          const req = upload(formData)
           this.reqs[uid] = req // 文件UID 与请求的映射
           if (req && req.then) { // 如果请求有then 就触发then函数传入成功和失败的回调函数
             req.then(options.onSuccess, options.onError)

@@ -1,7 +1,7 @@
 
 const imagesModel = require('../models/images');
 
-const uploadImages = async(ctx, body) => {
+const addImages = async(ctx, body) => {
   console.log(ctx)
   //console.log(ctx.req.file, ctx.req.body) // { title: '111', desc: '22222222' },
   const data = {
@@ -33,15 +33,22 @@ const uploadImages = async(ctx, body) => {
 }
 
 const getImages = async(ctx, body) => {
-  const res = await imagesModel.find({});
+  const { page = 1, pageSize = 5, time} = ctx.query
+  const count = await imagesModel.count();
+  const res = await imagesModel.find({createTime:{$lte:time}}).sort({_id:-1}).skip((page -1)*pageSize).limit(pageSize);
   ctx.body = {
     code: 200,
     message: '查询成功',
-    data:res
+    data:{
+      page,
+      pageSize,
+      count,
+      data:res
+    }
   }
 }
 
 module.exports = {
   getImages,
-  uploadImages
+  addImages
 }

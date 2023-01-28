@@ -1,20 +1,20 @@
 <template>
   <div>
-    <div class="grid gap-x-2 gap-y-2 grid-cols-3">
+    <div class="grid gap-x-2 gap-y-2 grid-cols-1 md:grid-cols-3 ">
       <div
-        class=" w-full h-[190px] bg-gray-300 rounded-lg overflow-hidden relative group"
+        class=" md:w-[250px] h-[190px] bg-gray-300 rounded-lg overflow-hidden relative group"
         v-for="img in imgList"
         :key="img.uid"
         @click="handleClick(img)"
         >
           <div
           @click="handleRemove(img)"
-          class=" group-hover:invisible visible absolute w-[18px] h-[18px] bg-gray-700 top-1 right-1 text-white flex justify-center items-center">
+          class="visible z-10 absolute w-[18px] h-[18px] bg-gray-700 top-1 right-1 text-white flex justify-center items-center">
             <icon :w="12" :h="12"  name="close" class="cursor-pointer"/>
           </div>
           <!-- <img v-if="img.status === 'ready'" class="filter blur-[2px] object-cover w-full h-full" :src="img.url"/> -->
           <img class="object-cover w-full h-full" :src="img.url"/>
-          <div class="group-hover:visible  invisible absolute w-full h-full bg-gray-700 bottom-0 left-0 text-white flex justify-center items-center cursor-pointer">
+          <div class="transform duration-500 ease-in-out group-hover:visible  invisible absolute w-full h-full bg-gray-700 bottom-0 left-0 text-white flex justify-center items-center cursor-pointer">
            <icon name="edit" :w="30" :h="30" class="mr-4"/> 编辑图片信息
           </div>
       </div>
@@ -29,6 +29,7 @@
   <Dialog
    :isOpen="showDialog"
    size="md"
+   class="z-10"
    @close="handleCloseDialog"
    @cancel="handleCloseDialog"
    @confirm="handleConfirm"
@@ -50,7 +51,7 @@
    :isOpen="showTip"
    size="sm"
    @close="()=> showTip = false"
-   @cancel="()=>showTip = false"
+   @cancel="handleCancelTip"
    @confirm="handleConfirmTip"
    confirmText="继续上传"
    cancelText="返回列表"
@@ -89,6 +90,10 @@ export default {
     }
   },
   methods: {
+    handleCancelTip () {
+      this.$router.push('/')
+      this.showTip = false
+    },
     handleConfirmTip () {
       console.log('confirm')
       this.showTip = false

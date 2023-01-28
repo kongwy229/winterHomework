@@ -1,12 +1,12 @@
 
 import UploadPage from '@/view/UploadPage'
-import HelloWorld from '@/view/HelloWorld'
+import Home from '@/view/Home'
 const routes = [
   {
     path: '/',
-    name: 'list',
+    name: 'home',
     navName: '首页',
-    component: HelloWorld
+    component: Home
   },
   {
     path: '/upload',
