@@ -1,16 +1,58 @@
-var express = require('express');
-var router = express.Router();
-let photos = [];
+var Photo = require('../models/Photo');
+var path = require('path');
+var fs = require('fs');
+const { dir } = require('console');
+var join = path.join;
+
+let photos = []
 photos.push({
-    name: 'test1',
-    path:'https://webstatic.mihoyo.com/upload/op-public/2021/10/03/58574b8c47e058787cc24049413b7cea_7872872512863208275.png'
-},{
-    name:'test',
-    path:"https://webstatic.mihoyo.com/upload/op-public/2021/10/03/663fe95dff54044d7cd5d3a355f61bf7_6089937633900261947.png"
+    name:"node.js Logo",
+    path:"https://nodejs.org/static/images/logo.svg"
 })
-router.get('/', function(req, res, next) {
-    res.render('photos', { title: 'Photos', photos: photos });
-});
-  
-module.exports = router;
-  
+photos.push({
+    name:"Ryan Speaking",
+    path:"https://nodejs.org/static/images/logo.svg"
+})
+exports.submit = function(dir){
+    return function(req,res,next){
+        var img = req.files.Photo.image;
+        var name = req.body.Photo.name || img.name;
+        var path = join(dir,img.name)
+        fs.rename(img.path,path,function(err){
+            if(err) return next(err)
+        })
+        Photo.create({
+            name:name,
+            path:img.name
+        },function(err){
+            if(err) return next(err);
+            res.redirect('/')
+        })
+    }
+}
+
+exports.list = function(req,res,next){
+    Photo.find({},function(err,photos){
+        if(err) return next(err);
+    })
+    res.render('photos',{
+        title:"Photos",
+        photos:photos
+    })
+}
+
+exports.form = function(req,res){
+    res.render('photos/upload',{
+        title:"Photo upload",
+    })
+}
+exports.download =function(dir){
+    return  function(req,res,next){
+        var id = req.params.id;
+        Photo.findById(id,function(err,photo){
+            if(err) return next(err);
+            var path = join(dir,photo.path);
+            res.sendfile(path)
+        })
+    }
+}

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <% includes menu %> 
+    
+        <% entries.forEach(function (entry){%>
+            <div class="entry">
+                <h2><%= entry.title %></h2>
+                <p><% =entry.body %> </p>
+                <p>Posted by<% =entry.username %> </p>
+            </div>
+        <%})%>
+        <% includes pager %> 
+  </body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <% includes menu %> 
+    
+    <h1><%= title %></h1>
+    <p>Fill in the form blow to add a new post!</p>
+    
+    <% includes messages %> 
+
+    <form action="/post" method="post">
+        <p><input type="text" name='entry[title]' placeholder="Title"></p>
+        <p><textarea type="password" name='entry[body]'  placeholder="Body"></textarea>
+        <p><input type="submit" value="Post"></p>
+    </form>
+  </body>
+</html>
