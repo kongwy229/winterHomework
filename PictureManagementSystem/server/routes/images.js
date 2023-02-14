@@ -20,11 +20,5 @@ const storage = multer.diskStorage({
   
 router.post('/images',upload.single('file'),imageController.addImages);
 router.get('/images',imageController.getImages);
-// router.get('/getArticle', async(ctx, next) => {
-//     ctx.body = {
-//         code: 200,
-//         message: '查询成功',
-//         data: {}
-//     }
-// })
+
 module.exports = router

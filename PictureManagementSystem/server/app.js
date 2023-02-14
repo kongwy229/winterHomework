@@ -12,6 +12,7 @@ const index = require('./routes/index')
 const users = require('./routes/users')
 const upload = require('./routes/images')
 
+const {check_token} = require('./utils/token')
 require("./database");
 onerror(app)
 
@@ -20,8 +21,8 @@ app.use(bodyparser({
 }))
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/public',{maxage: 300}))
-
+app.use(require('koa-static')(__dirname + '/public',{maxage: 3000}))
+app.use(check_token)
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
 }))
@@ -36,6 +37,7 @@ app.use(async (ctx, next) => {
 
 // routes
 app.use(upload.routes(), upload.allowedMethods())
+app.use(users.routes(), users.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

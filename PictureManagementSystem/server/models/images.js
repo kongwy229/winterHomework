@@ -6,8 +6,10 @@ var obj = {
   title: String,
   desc: String,
   url: String,
-  createTime: Number,
-  checkTime: Number,
+  name: String,
+  createTime: String,
+  showTime: Number,
+  checkTime: String,
   checkResult: String
 }
 

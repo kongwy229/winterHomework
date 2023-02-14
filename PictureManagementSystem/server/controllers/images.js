@@ -1,48 +1,55 @@
 
 const imagesModel = require('../models/images');
+const moment = require('moment')
+const objectIdToTimestamp = require('objectid-to-timestamp')
 
 const addImages = async(ctx, body) => {
-  console.log(ctx)
   //console.log(ctx.req.file, ctx.req.body) // { title: '111', desc: '22222222' },
-  const data = {
+
+  let image = new imagesModel({
     url: `http://localhost:3000/images/${ctx.req.file.filename}`,
+    name: ctx.req.file.filename,
     title: ctx.req.body.title || '',
     desc: ctx.req.body.desc || '',
-    checkTime:0,
-    checkResult:'none',
-    createTime: Date.now()
-  }
-  const res = await imagesModel.create(data)
+    checkTime:'',
+    showTime: -1,
+    checkResult:'none'
+  })
+  image.createTime = moment(objectIdToTimestamp(image._id)).format('YYYY-MM-DD HH:mm:ss') // 将objectid转换为创建时间
+
+  await new Promise((resolve, reject) => {
+    image.save((err) => {
+      if (err) {
+        reject(err)
+      }
+      resolve()
+    })
+  })
+
   ctx.body = {
     code: 200,
-    message: '插入成功',
-    data:res
+    message: '上传成功'
   }
-  // {
-  //   fieldname: 'file',
-  //   originalname: '企业微信截图_16530536474967.png',
-  //   encoding: '7bit',
-  //   mimetype: 'image/png',
-  //   destination: './public/images',
-  //   filename: 'file-185df697b10.png',
-  //   path: 'public\\images\\file-185df697b10.png',
-  //   size: 685191
-
-  // http://localhost:3000/images/file-185df697b10.png
-  // }
 }
 
 const getImages = async(ctx, body) => {
-  const { page = 1, pageSize = 5, time} = ctx.query
-  const count = await imagesModel.count();
-  const res = await imagesModel.find({createTime:{$lte:time}}).sort({_id:-1}).skip((page -1)*pageSize).limit(pageSize);
+  const { pageSize = 5, showTime} = ctx.query
+  const params = {checkResult : "approve" }
+  if(showTime){
+    params.showTime = { '$lt': showTime }
+  }
+  const res = await imagesModel
+  .find(
+    params,
+    null, 
+    {sort:{showTime:-1}, limit:pageSize}
+  )
+  console.log(res)
   ctx.body = {
     code: 200,
     message: '查询成功',
     data:{
-      page,
       pageSize,
-      count,
       data:res
     }
   }
