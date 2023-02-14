@@ -3,7 +3,7 @@ module.exports = {
   purge: [
     './public/**/*.html',
     './src/**/*.vue',
-    "./src/**/*.jsx"
+    './src/**/*.jsx'
   ],
   mode: 'jit', // 加上之后可以使用px
   darkMode: false, // or 'media' or 'class'

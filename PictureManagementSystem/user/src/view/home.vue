@@ -57,7 +57,6 @@
       <icon name="right" :w="40" :h="40" class="cursor-pointer"/>
     </button>
    </div>
-    <p class="text-gray-700 text-xl mt-2">{{editIndex}} / {{total}}</p>
   </Dialog>
 </div>
 </template>
@@ -74,13 +73,9 @@ export default {
   data () {
     return {
       list: [],
-      page: 1,
-      total: 0,
-      maxPage: 1,
       bottomLoading: false,
       position: 0,
       startInit: 0,
-      dataOver: false,
       refreshLoading: false,
       refresh: {
         height: 0
@@ -97,8 +92,7 @@ export default {
   computed: {
   },
   mounted () {
-    sessionStorage.setItem('time', Date.now())
-    this.getImages(1)
+    this.getImages()
   },
   methods: {
     handleCloseDialog () {
@@ -110,29 +104,22 @@ export default {
     },
     async handleDown () {
       if (this.editIndex === this.list.length - 1) {
-        await this.getImages(this.page + 1)
+        await this.getImages()
+      } else {
+        this.handleClick(this.editIndex + 1)
       }
-      this.handleClick(this.editIndex + 1)
     },
     handleClick (index) {
       this.editImg = this.list[index]
       this.editIndex = index
       this.showDialog = true
     },
-    getImages (page = 1) {
-      if (this.dataOver) return Promise.resolve()
-      const time = sessionStorage.getItem('time')
-      return getList({page, time})
+    getImages () {
+      const length = this.list.length - 1
+      return getList({showTime: length === -1 ? null : this.list[length].showTime})
         .then((res) => {
-          // console.log(res)
           const resData = res.data.data
-          this.list = page === 1 ? [] : this.list
-          this.maxPage = Math.ceil(resData.count / 20)
-          this.page = page
-          this.total = resData.count
-          if (this.maxPage === page) {
-            this.dataOver = true
-          }
+          this.list = length === -1 ? [] : this.list
           this.list.push(...resData.data)
         }).finally(() => {
           this.refreshLoading = false
@@ -147,11 +134,10 @@ export default {
       if (timer) {
         clearTimeout(timer)
       }
-      // console.log(scrollPosition, scrollTop)
       timer = setTimeout(() => {
         this.bottomLoading = true
         if (scrollPosition - scrollTop <= 50) {
-          this.getImages(this.page + 1)
+          this.getImages()
         }
       }, 200)
       this.position = scrollTop
@@ -177,14 +163,15 @@ export default {
     async handlerEnd () {
       if (this.refresh.height >= 30) {
         this.refresh.height = 40
-        this.dataOver = false
-        sessionStorage.setItem('time', Date.now())
-        await this.getImages()
+        this.list = []
         this.refreshLoading = true
+        await this.getImages()
       } else {
         this.refresh.height = 0
       }
       this.startInit = 0
+      this.refreshLoading = false
+      this.position = 0
     }
   }
 }
