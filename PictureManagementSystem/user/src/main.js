@@ -5,13 +5,12 @@ import App from './App'
 import Router from 'vue-router'
 import routes from './router'
 import './styles/index.css'
-// 引入自定义指令
+import Toast from './components/Toast/index'
 import setting from './directive/index'
 import Icon from 'vue2-svg-icon/Icon'
 Vue.component('icon', Icon)
-
 Vue.use(setting)
-
+Vue.use(Toast)
 Vue.use(Router)
 Vue.config.productionTip = false
 

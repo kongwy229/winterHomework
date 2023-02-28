@@ -73,6 +73,7 @@ export default {
   data () {
     return {
       list: [],
+      uniqueList: new Set(), // 用于去重
       bottomLoading: false,
       position: 0,
       startInit: 0,
@@ -99,7 +100,13 @@ export default {
       this.showDialog = false
     },
     handleUp () {
-      if (this.editIndex === 0) return
+      if (this.editIndex === 0) {
+        this.$toast({
+          message: `已经是第一张了~`,
+          duration: 1500
+        })
+        return
+      }
       this.handleClick(this.editIndex - 1)
     },
     async handleDown () {
@@ -116,12 +123,24 @@ export default {
     },
     getImages () {
       const length = this.list.length - 1
-      return getList({showTime: length === -1 ? null : this.list[length].showTime})
+      return getList({sort: length === -1 ? null : this.list[length].sort})
         .then((res) => {
           const resData = res.data.data
           this.list = length === -1 ? [] : this.list
-          this.list.push(...resData.data)
-        }).finally(() => {
+          for (let i = 0; i < resData.data.length; i++) {
+            if (!this.uniqueList.has(resData.data[i]._id)) {
+              this.list.push(resData.data[i])
+              this.uniqueList.add(resData.data[i]._id)
+            }
+          }
+        })
+        .catch((err) => {
+          this.$toast({
+            message: `获取数据出错: ${err}`,
+            duration: 1500
+          })
+        })
+        .finally(() => {
           this.refreshLoading = false
           this.refresh.height = 0
         })
@@ -177,7 +196,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .top-refresh {
     background-color: #ccc;

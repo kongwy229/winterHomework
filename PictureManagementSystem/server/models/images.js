@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema; //概要计划，计划往数据库中准备存放哪些信息
 var obj = {
+  sort:Number,
   title: String,
   desc: String,
   url: String,

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Sort from '../views/Sort.vue'
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -18,6 +19,14 @@ const routes = [
     path: '/home',
     name: 'home',
     component: Home,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/sort',
+    name: 'sort',
+    component: Sort,
     meta: {
       requiresAuth: true
     }

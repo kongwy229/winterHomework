@@ -73,3 +73,15 @@ export async function updateList (data) {
 export async function deleteList (params) {
   return instance.delete('list', {params})
 }
+export async function getSortList (params) {
+  return instance.get('sort', {params})
+}
+export async function updateSortList (data) {
+  return instance.patch('sort', data)
+}
+export async function setTop (data) {
+  return instance.post('sort', data)
+}
+export async function cancelTop () {
+  return instance.delete('sort')
+}

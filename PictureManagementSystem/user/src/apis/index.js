@@ -4,7 +4,7 @@ export async function getList (params) {
   return axios.get(`${api}images`, {
     params: {
       pageSize: 20,
-      showTime: params.showTime
+      sort: params.sort
     }
   })
 }

@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <el-button @click="toSortPage" type="primary">开启排序</el-button>
     <el-table ref="table" :data="tableData" current-row-key="_id" height="80vh" v-loading="loading">
         <el-table-column label="图片">
           <template slot-scope="scope">
@@ -137,7 +138,6 @@ export default {
   },
   mounted () {
     this.getListData({page: 1})
-    // this.initSort();
   },
   computed: {
     preData () {
@@ -160,6 +160,9 @@ export default {
     }
   },
   methods: {
+    toSortPage () {
+      this.$router.push('/sort')
+    },
     handleClick (row) {
       this.currentData = row
       this.dialogVisible = true

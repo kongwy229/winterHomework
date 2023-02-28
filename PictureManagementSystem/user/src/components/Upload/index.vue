@@ -12,7 +12,6 @@
           class="visible z-10 absolute w-[18px] h-[18px] bg-gray-700 top-1 right-1 text-white flex justify-center items-center">
             <icon :w="12" :h="12"  name="close" class="cursor-pointer"/>
           </div>
-          <!-- <img v-if="img.status === 'ready'" class="filter blur-[2px] object-cover w-full h-full" :src="img.url"/> -->
           <img class="object-cover w-full h-full" :src="img.url"/>
           <div class="transform duration-500 ease-in-out group-hover:visible  invisible absolute w-full h-full bg-gray-700 bottom-0 left-0 text-white flex justify-center items-center cursor-pointer">
            <icon name="edit" :w="30" :h="30" class="mr-4"/> 编辑图片信息
@@ -22,14 +21,12 @@
       ref="uploadButton"
       :list="imgList"
       :limit="limit"
-      @start="handleStart"
-      @error="handleError"
-      @success="handleSuccess"/>
+      @start="handleStart"/>
   </div>
   <Dialog
    :isOpen="showDialog"
    size="md"
-   class="z-10"
+   class="z-30"
    @close="handleCloseDialog"
    @cancel="handleCloseDialog"
    @confirm="handleConfirm"
@@ -47,20 +44,6 @@
         <Input  class="flex-grow" placeholder="请输入图片介绍" :limit="300" v-model="editImg.desc"/>
     </div>
   </Dialog>
-  <Dialog
-   :isOpen="showTip"
-   size="sm"
-   @close="()=> showTip = false"
-   @cancel="handleCancelTip"
-   @confirm="handleConfirmTip"
-   confirmText="继续上传"
-   cancelText="返回列表"
-   >
-   <div class="flex items-center space-x-2">
-      <icon name="success" :w="40" :h="40" class="text-primary-500"/>
-      <span>发布成功,请等待审核</span>
-   </div>
-  </Dialog>
   </div>
 </template>
 <script>
@@ -69,7 +52,8 @@ import Dialog from '@/components/Dialog'
 import Input from '@/components/Input'
 export default {
   props: {
-    size: String
+    size: String,
+    imgList: Array
   },
   name: 'Upload',
   components: {
@@ -77,33 +61,17 @@ export default {
     Dialog,
     Input
   },
-  computed: {
-  },
   data () {
     return {
       tempIndex: 1,
       limit: 50,
       editImg: {url: '', title: '', desc: ''},
-      showDialog: false,
-      imgList: [],
-      showTip: false
+      showDialog: false
     }
   },
   methods: {
-    handleCancelTip () {
-      this.$router.push('/')
-      this.showTip = false
-    },
-    handleConfirmTip () {
-      console.log('confirm')
-      this.showTip = false
-    },
-    submitImgList () {
-      console.log('准备提交')
-      this.$refs.uploadButton.post().then((value) => {
-        console.log(value, 'ok')
-        this.showTip = true
-      })
+    preSubmit () {
+      this.$refs.uploadButton.post()
     },
     getFile (rawFile) {
       const {uid} = rawFile
@@ -113,7 +81,6 @@ export default {
       let target = this.imgList.find((img) => img.uid === this.editImg.uid)
       target.title = this.editImg.title
       target.desc = this.editImg.desc
-      console.log('confirm')
       this.handleCloseDialog()
     },
     handleCloseDialog () {
@@ -140,7 +107,10 @@ export default {
       try {
         file.url = URL.createObjectURL(rawFile) // 需要预览的时候就生成 blob://
       } catch (err) {
-        console.error('[Element Error][Upload]', err)
+        this.$toast({
+          message: `上传出错: ${err}`,
+          duration: 1500
+        })
         return
       }
       this.imgList.push(file) // 加入到文件列表
@@ -148,13 +118,11 @@ export default {
     handleRemove (file) {
       this.imgList.splice(this.imgList.indexOf(file), 1)
     },
-    handleError ({rawFile}) {
-      console.log(rawFile)
+    handleError (rawFile) {
       const file = this.getFile(rawFile)
       file.status = 'fail'
-      // this.handleRemove(file)
     },
-    handleSuccess ({res, rawFile}) {
+    handleSuccess (res, rawFile) {
       const file = this.getFile(rawFile)
       if (file) {
         // 释放内存
@@ -162,10 +130,7 @@ export default {
         file.status = 'success'
       }
       this.handleRemove(file)
-      console.log(res, rawFile, file, this.imgList)
     }
   }
 }
 </script>
-<style scoped>
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class=" z-10 header fixed w-full h-md bg-gray-1000 flex flex-start items-center text-lg text-white space-x-4">
+  <div class=" z-20 header fixed w-full h-md bg-gray-1000 flex flex-start items-center text-lg text-white space-x-4">
       <div>
         <img class="h-md" src="@/assets/mys-logo.png"/>
       </div>

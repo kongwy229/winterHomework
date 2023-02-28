@@ -14,4 +14,9 @@ router
   .get("/list", listController.getList) //获取列表数据
   .put('/list', listController.updateList) //修改列表数据
   .delete('/list', listController.deleteList) // 删除列表数据
+router
+  .get("/sort", listController.getSortList) // 获取排序数据
+  .patch("/sort", listController.updateSortList) // 更新排序顺序
+  .post("/sort", listController.updateTop) // 置顶
+  .delete("/sort", listController.cancelTop) // 取消置顶
 module.exports = router

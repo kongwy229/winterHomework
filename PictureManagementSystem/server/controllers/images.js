@@ -12,6 +12,7 @@ const addImages = async(ctx, body) => {
     title: ctx.req.body.title || '',
     desc: ctx.req.body.desc || '',
     checkTime:'',
+    sort: -1, // 未审核通过时初始化为-1
     showTime: -1,
     checkResult:'none'
   })
@@ -33,18 +34,17 @@ const addImages = async(ctx, body) => {
 }
 
 const getImages = async(ctx, body) => {
-  const { pageSize = 5, showTime} = ctx.query
+  const { pageSize = 5, sort} = ctx.query
   const params = {checkResult : "approve" }
-  if(showTime){
-    params.showTime = { '$lt': showTime }
+  if(sort){
+    params.sort = { '$lt': sort}
   }
   const res = await imagesModel
   .find(
     params,
     null, 
-    {sort:{showTime:-1}, limit:pageSize}
+    {sort:{sort:-1}, limit:pageSize}
   )
-  console.log(res)
   ctx.body = {
     code: 200,
     message: '查询成功',
