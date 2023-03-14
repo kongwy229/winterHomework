@@ -1,8 +1,15 @@
 <template>
   <div class="sort">
     <el-button @click="toHomePage">返回首页</el-button>
-    <el-button @click="handleConfirm" type="primary">保存排序结果</el-button>
+    <el-button @click="()=>handleConfirm()" type="primary">保存排序结果</el-button>
     <el-table ref="table" :data="tableData" row-key="_id" height="80vh" v-loading="loading" :row-class-name="tableRowClassName">
+        <el-table-column label="拖拽">
+          <template>
+            <div class="draggable">
+              <i class="el-icon-s-operation"></i>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column label="序号">
           <template slot-scope="scope">
             <span v-if="scope.row.sort === Number.MAX_SAFE_INTEGER">首图</span>
@@ -16,7 +23,6 @@
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column
-        fixed="right"
         label="操作"
         width="100">
         <template slot-scope="scope">
@@ -163,6 +169,7 @@ export default {
       // eslint-disable-next-line no-new
       new Sortable(el, {
         animation: 500,
+        handle: '.draggable',
         draggable: '.el-table__row', // 被选择拖拽的元素
         filter: '.top',
         onFilter: function () {
@@ -194,3 +201,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .draggable{
+    cursor: move;
+  }
+</style>
